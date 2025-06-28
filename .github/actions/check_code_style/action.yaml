@@ -1,0 +1,32 @@
+name: Check code style
+description: Run linting tests to check Python code style
+
+inputs:
+  image_name:
+    description: The Docker image to use to run the linting tests
+    required: true
+  image_tag:
+    description: The tag for the Docker image to use to run the linting tests
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: mypy
+      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run mypy --config-file pyproject.toml src/
+      shell: bash
+    - name: flake8
+      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run pflake8 --config pyproject.toml src/
+      shell: bash
+    - name: black
+      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run black --config pyproject.toml src/
+      shell: bash
+    - name: isort
+      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run isort --settings-path pyproject.toml src/
+      shell: bash
+    - name: autoflake
+      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run autoflake --config pyproject.toml src/
+      shell: bash
+    - name: bandit
+      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run bandit -c pyproject.toml -r src/
+      shell: bash

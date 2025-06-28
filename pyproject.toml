@@ -1,0 +1,66 @@
+[tool.poetry]
+name = "hashmap"
+version = "0.1.0"
+description = "Custom Python hashmap implementation"
+authors = ["Stamatis Spyriounis <spyriouniss@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "src"}]
+package-mode = true
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.2.0"
+black = "^25.1.0"
+flake8 = "^7.0.0"
+autoflake = "^2.3.1"
+isort = "^6.0.1"
+mypy = "^1.16.1"
+bandit = "^1.8.5"
+pyproject-flake8 = "^7.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+ignore_missing_imports = true
+scripts_are_modules = true
+
+
+[tool.flake8]
+ignore = "E203" # E203 is not PEP8 compliant
+max-complexity = 10
+docstring-convention = "numpy"
+max-line-length = 88
+
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+
+
+[tool.isort]
+profile = "black"
+line_length = 88
+include_trailing_comma = true
+
+
+[tool.autoflake]
+remove-all-unused-imports = true
+expand-star-imports = true
+remove-duplicate-keys = true
+remove-unused-variables = true
+in-place = true
+recursive = true
+
+
+[tool.bandit]
+recursive = true
