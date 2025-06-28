@@ -21,9 +21,6 @@ runs:
     - name: black
       run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run black --config pyproject.toml src/
       shell: bash
-    - name: black-jupyter
-      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run black --config pyproject.toml analysis/
-      shell: bash
     - name: isort
       run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run isort --settings-path pyproject.toml src/
       shell: bash

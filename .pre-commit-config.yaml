@@ -22,10 +22,6 @@ repos:
         entry: poetry run black
         args: [--config=pyproject.toml]
         files: src/
-      - id: black-jupyter
-        entry: poetry run black
-        args: [--config=pyproject.toml]
-        files: analysis/
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
     hooks:
