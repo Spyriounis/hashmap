@@ -5,12 +5,11 @@ description = "Custom Python hashmap implementation"
 authors = ["Stamatis Spyriounis <spyriouniss@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "src"}]
+packages = [{include = "hashmap"}]
 package-mode = true
 
 [tool.poetry.dependencies]
 python = "^3.12"
-
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.2.0"
@@ -21,6 +20,8 @@ isort = "^6.0.1"
 mypy = "^1.16.1"
 bandit = "^1.8.5"
 pyproject-flake8 = "^7.0.0"
+ipykernel = "^6.29.5"
+pytest = "^8.4.1"
 
 [build-system]
 requires = ["poetry-core"]
@@ -33,25 +34,20 @@ warn_return_any = true
 ignore_missing_imports = true
 scripts_are_modules = true
 
-
 [tool.flake8]
-ignore = "E203" # E203 is not PEP8 compliant
+ignore = "E203, W503" # E203 is not PEP8 compliant
 max-complexity = 10
 docstring-convention = "numpy"
 max-line-length = 88
-
 
 [tool.black]
 line-length = 88
 target-version = ["py312"]
 
-
-
 [tool.isort]
 profile = "black"
 line_length = 88
 include_trailing_comma = true
-
 
 [tool.autoflake]
 remove-all-unused-imports = true
@@ -61,6 +57,18 @@ remove-unused-variables = true
 in-place = true
 recursive = true
 
-
 [tool.bandit]
 recursive = true
+exclude_dirs = ["tests"]
+
+[tool.pytest.ini_options]
+addopts = [
+    "-ra -q",
+    "--import-mode=importlib",
+]
+testpaths = ["tests/"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::RuntimeWarning",
+]
+pythonpath = ["hashmap", "."]

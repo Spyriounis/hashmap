@@ -31,4 +31,4 @@ COPY poetry.lock ./
 RUN poetry install --no-cache --no-interaction
 
 # Copy the source code and unit tests
-COPY src /app/src/
+COPY hashmap /app/hashmap/

@@ -13,20 +13,20 @@ runs:
   using: composite
   steps:
     - name: mypy
-      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run mypy --config-file pyproject.toml src/
+      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run mypy --config-file pyproject.toml hashmap/
       shell: bash
     - name: flake8
-      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run pflake8 --config pyproject.toml src/
+      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run pflake8 --config pyproject.toml hashmap/
       shell: bash
     - name: black
-      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run black --config pyproject.toml src/
+      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run black --config pyproject.toml hashmap/
       shell: bash
     - name: isort
-      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run isort --settings-path pyproject.toml src/
+      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run isort --settings-path pyproject.toml hashmap/
       shell: bash
     - name: autoflake
-      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run autoflake --config pyproject.toml src/
+      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run autoflake --config pyproject.toml hashmap/
       shell: bash
     - name: bandit
-      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run bandit -c pyproject.toml -r src/
+      run: docker run --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run bandit -c pyproject.toml -r hashmap/
       shell: bash
