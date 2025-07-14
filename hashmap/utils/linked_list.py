@@ -17,7 +17,7 @@ class Node:
         next_node: Self | None = None,
     ) -> None:
         """
-        Initialize a new node with a given key, value and optional pointer to the next node.
+        Initialize a new node with a given key, value and pointer to the next node.
 
         Parameters
         ----------
@@ -25,7 +25,7 @@ class Node:
             The key for this node.
         value : ValueType
             The value associated with the key.
-        next_node : Node | None, optional
+        next_node : Node | None
             Pointer to the next node in the linked list (default is None).
 
         Returns

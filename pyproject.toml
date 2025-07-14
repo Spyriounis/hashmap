@@ -35,7 +35,7 @@ ignore_missing_imports = true
 scripts_are_modules = true
 
 [tool.flake8]
-ignore = "E203" # E203 is not PEP8 compliant
+ignore = "E203, W503" # E203 is not PEP8 compliant
 max-complexity = 10
 docstring-convention = "numpy"
 max-line-length = 88

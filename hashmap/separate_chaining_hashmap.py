@@ -1,3 +1,5 @@
+from typing import Iterator
+
 from hashmap.base_hashmap import BaseHashMap
 from hashmap.utils.custom_types import KeyType, ValueType
 from hashmap.utils.linked_list import Node
@@ -41,15 +43,15 @@ class SeparateChainingHashmap(BaseHashMap):
             downsize_factor,
             upsize_factor,
         )
-        self.buckets = [Node() for _ in range(self.capacity)]
+        self.buckets: list[Node] = [Node() for _ in range(self.capacity)]
 
     def get(self, key: KeyType, default_val: ValueType = None) -> ValueType:
         """
         Retrieve the value associated with the given key.
 
-        This method searches through the linked list at the computed hash index for the key.
-        If the key is found, it returns the associated value. If the key does not exist,
-        it returns the default value specified during initialization.
+        This method searches through the linked list at the computed hash index for the
+        key. If the key is found, it returns the associated value. If the key does not
+        exist, it returns the default value specified during initialization.
 
         Parameters
         ----------
@@ -61,12 +63,13 @@ class SeparateChainingHashmap(BaseHashMap):
         Returns
         -------
         ValueType
-            The value associated with the key, or the default value if the key does not exist.
+            The value associated with the key, or the default value if the key does not
+            exist.
         """
         index = self._hash(key)
-        current_node = self.buckets[index]
+        current_node: Node | None = self.buckets[index]
 
-        while current_node:
+        while current_node is not None:
             if current_node.key == key:
                 return current_node.value
             current_node = current_node.next_node
@@ -153,24 +156,27 @@ class SeparateChainingHashmap(BaseHashMap):
         if current_node.key is None:
             raise KeyError(f"Key '{key}' not found in the hash map.")
 
-        # Remove the first node in the chain
+        # Remove the first node in the linked list
         if current_node.key == key:
-            if not current_node.next_node:
-                # If there's no next node, just clear the current node
-                self.buckets[index] = Node(None, None, None)  # Reset to an empty node
+            # If there's no next node, just clear the current node
+            if current_node.next_node is None:
+                self.buckets[index] = Node()  # Reset to an empty node
+            # If there's a next node, point the bucket to the next node
             else:
-                # If there's a next node, point the bucket to the next node
                 self.buckets[index] = current_node.next_node
             self.size -= 1
             return
 
-        while current_node.next_node.key is not None:
-            if current_node.next_node.key == key:
-                # Remove the node by skipping it
-                current_node.next_node = current_node.next_node.next_node
+        # Traverse the linked list to find and remove the key
+        next_node: Node | None = current_node.next_node
+        while next_node is not None:
+            if next_node.key == key:
+                # Remove the current node by linking the previous node to the next node
+                current_node.next_node = next_node.next_node
                 self.size -= 1
                 return
-            current_node = current_node.next_node
+            current_node = next_node
+            next_node = current_node.next_node
 
         raise KeyError(f"Key '{key}' not found in the hash map.")
 
@@ -196,7 +202,7 @@ class SeparateChainingHashmap(BaseHashMap):
         self.buckets = [Node() for _ in range(self.capacity)]
 
         for bucket in old_buckets:
-            current_node = bucket
+            current_node: Node | None = bucket
             while current_node:
                 if current_node.key is not None:
                     self.put(current_node.key, current_node.value, new_entry=False)
@@ -217,7 +223,7 @@ class SeparateChainingHashmap(BaseHashMap):
         """
         keys = []
         for bucket in self.buckets:
-            current_node = bucket
+            current_node: Node | None = bucket
             while current_node:
                 if current_node.key is not None:
                     keys.append(current_node.key)
@@ -239,7 +245,7 @@ class SeparateChainingHashmap(BaseHashMap):
         """
         values = []
         for bucket in self.buckets:
-            current_node = bucket
+            current_node: Node | None = bucket
             while current_node:
                 if current_node.key is not None:
                     values.append(current_node.value)
@@ -261,7 +267,7 @@ class SeparateChainingHashmap(BaseHashMap):
         """
         pairs = []
         for bucket in self.buckets:
-            current_node = bucket
+            current_node: Node | None = bucket
             while current_node:
                 if current_node.key is not None:
                     pairs.append(f"{current_node.key!r}: {current_node.value!r}")
@@ -273,8 +279,9 @@ class SeparateChainingHashmap(BaseHashMap):
         """
         Calculate the current load factor of the hash map.
 
-        The load factor is defined as the number of entries divided by the number of buckets.
-        It indicates how full the hash map is, and can be used to determine if resizing is needed.
+        The load factor is defined as the number of entries divided by the number of
+        buckets. It indicates how full the hash map is, and can be used to determine if
+        resizing is needed.
 
         Returns
         -------
@@ -283,7 +290,7 @@ class SeparateChainingHashmap(BaseHashMap):
         """
         return len(self) / self.capacity  # For separate chaining, this can be > 1
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Return a string representation of the hash map.
 
@@ -297,7 +304,7 @@ class SeparateChainingHashmap(BaseHashMap):
         """
         return "{" + ", ".join(self._pairs) + "}"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         Return a string representation of the hash map.
 
@@ -335,7 +342,7 @@ class SeparateChainingHashmap(BaseHashMap):
         """
         return self.get(key, default_val=None) is not None
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[KeyType]:
         """
         Return an iterator over the keys in the hash map.
         """

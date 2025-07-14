@@ -10,8 +10,9 @@ class BaseHashMap(ABC):
     Abstract interface for a hash map implementation.
 
     This class defines the basic structure and methods that any hash map implementation
-    should provide. It includes methods for inserting, retrieving, and removing key-value pairs,
-    as well as properties for managing the hash map's capacity and load factors.
+    should provide. It includes methods for inserting, retrieving, and removing
+    key-value pairs, as well as properties for managing the hash map's capacity and
+    load factors.
 
     Attributes
     ----------
@@ -70,10 +71,12 @@ class BaseHashMap(ABC):
         """
         Compute the hash value for the given key.
 
-        This method uses Python's built-in `hash` function and applies a modulo operation
-        with the current capacity to ensure the hash value fits within the bounds of the hash map.
+        This method uses Python's built-in `hash` function and applies a modulo
+        operation with the current capacity to ensure the hash value fits within the
+        bounds of the hash map.
 
-        This method is used internally to determine the index for storing or retrieving values.
+        This method is used internally to determine the index for storing or retrieving
+        values.
 
         Parameters
         ----------
@@ -102,9 +105,9 @@ class BaseHashMap(ABC):
         Returns
         -------
         ValueType
-            The value associated with the key, or the default value if the key does not exist.
+            The value associated with the key, or the default value if the key does not
+            exist.
         """
-        pass
 
     @abstractmethod
     def put(self, key: KeyType, value: ValueType) -> None:
@@ -122,7 +125,6 @@ class BaseHashMap(ABC):
         -------
         None
         """
-        pass
 
     @abstractmethod
     def remove(self, key: KeyType) -> None:
@@ -143,4 +145,3 @@ class BaseHashMap(ABC):
         -------
         None
         """
-        pass
