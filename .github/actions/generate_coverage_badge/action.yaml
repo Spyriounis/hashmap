@@ -28,15 +28,15 @@ runs:
   steps:
     - name: Generate Coverage Badge
       id: generate_coverage_badge
-      run: docker run -v ${{ inputs.volume_name }}:${{ inputs.mount_path }} --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} /bin/bash -c "cd ${inputs.mount_path} && poetry run coverage-badge -o ${inputs.output_mount}/coverage.svg"
+      run: docker run -v ${{ inputs.volume_name }}:${{ inputs.mount_path }} --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} /bin/bash -c "cd ${{ inputs.mount_path }} && poetry run coverage-badge -o ${{ inputs.output_mount }}/coverage.svg"
       shell: bash
 
     - name: Generate HTML Coverage Report
       id: generate_html_coverage_report
-      run: docker run -v ${{ inputs.volume_name }}:${{ inputs.mount_path }} --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run coverage html --data-file=${{ inputs.mount_path }}/.coverage -d =${{ inputs.mount_path }}
+      run: docker run -v ${{ inputs.volume_name }}:${{ inputs.mount_path }} --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run coverage html --data-file=${{ inputs.mount_path }}/.coverage -d ${{ inputs.mount_path }}
       shell: bash
 
     - name: Copy Coverage Badge
       id: copy_coverage_badge
-      run: docker cp $(docker create -v ${{ inputs.volume_name }}:${{ inputs.mount_path }} --name tmp_container ${{ inputs.image_name }}:${{ inputs.image_tag }}):${{ inputs.mount_path }} ${{ inputs.output_path }} ; && docker rm tmp_container
+      run: docker cp $(docker create -v ${{ inputs.volume_name }}:${{ inputs.mount_path }} --name tmp_container ${{ inputs.image_name }}:${{ inputs.image_tag }}):${{ inputs.mount_path }} ${{ inputs.output_path }} ; docker rm tmp_container
       shell: bash
