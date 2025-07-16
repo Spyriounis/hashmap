@@ -61,4 +61,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: code-coverage-gh-pages
-          folder: $${{ steps.generate_coverage_badge.outputs.output_path }}
+          folder: ${{ steps.generate_coverage_badge.outputs.output_path }}
