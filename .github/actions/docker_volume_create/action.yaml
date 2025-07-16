@@ -1,0 +1,20 @@
+name: Docker Volume Create
+description: Create a Docker volume for persistent storage by subsequent actions
+
+inputs:
+  volume_name:
+    description: The name of the Docker volume to create
+    required: true
+
+outputs:
+  volume_name:
+    description: The name of the created Docker volume
+    value: ${{ inputs.volume_name }}
+
+runs:
+  using: composite
+  steps:
+    - name: Build Docker Volume
+      run: |
+        docker volume create ${{ inputs.volume_name }}
+      shell: bash

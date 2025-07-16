@@ -1,0 +1,29 @@
+name: Run unit tests
+description: Run unit tests to check Python code quality
+
+inputs:
+  image_name:
+    description: The Docker image to use to run the unit tests
+    required: true
+  image_tag:
+    description: The tag for the Docker image to use to run the unit tests
+    required: true
+  volume_name:
+    description: The name of the Docker volume where test coverage reports are mounted
+    required: true
+  mount_path:
+    description: The path inside the Docker container where the test coverage reports are mounted
+    required: true
+
+outputs:
+  mount_path:
+    description: The path inside the Docker container where the test coverage reports are mounted
+    value: ${{ inputs.mount_path }}
+
+runs:
+  using: composite
+  steps:
+    - name: Run Unit Tests and Collect Code Coverage Data
+      id: run_unit_tests
+      run: docker run -v ${{ inputs.volume_name }}:${{ inputs.mount_path }} --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run coverage run --source=hashmap --data-file=${{ inputs.mount_path }}/.coverage -m pytest tests/
+      shell: bash

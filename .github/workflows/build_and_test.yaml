@@ -1,0 +1,64 @@
+name: Coverage report and check code style
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+permissions:
+  contents: write
+
+jobs:
+  docker_build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        id: build_docker_image
+        uses: ./.github/actions/docker_build
+        with:
+          image_name: hashmap
+          image_tag: latest
+
+      - name: Check code style
+        id: check_code_style
+        uses: ./.github/actions/check_code_style
+        with:
+          image_name: ${{ steps.build_docker_image.outputs.image_name }}
+          image_tag: ${{ steps.build_docker_image.outputs.image_tag }}
+
+      - name: Create Docker Volume for Coverage Reports
+        id: create_docker_volume
+        uses: ./.github/actions/docker_volume_create
+        with:
+          volume_name: coverage-report
+
+      - name: Run unit tests
+        id: run_unit_tests
+        uses: ./.github/actions/run_unit_tests
+        with:
+          image_name: ${{ steps.build_docker_image.outputs.image_name }}
+          image_tag: ${{ steps.build_docker_image.outputs.image_tag }}
+          volume_name: ${{ steps.create_docker_volume.outputs.volume_name }}
+          mount_path: /app/coverage_reports
+
+      - name: Generate Coverage Badge
+        id: generate_coverage_badge
+        uses: ./.github/actions/generate_coverage_badge
+        with:
+          image_name: ${{ steps.build_docker_image.outputs.image_name }}
+          image_tag: ${{ steps.build_docker_image.outputs.image_tag }}
+          volume_name: ${{ steps.create_docker_volume.outputs.volume_name }}
+          mount_path: ${{ steps.run_unit_tests.outputs.mount_path }}
+          output_path: /tmp/coverage_reports
+
+      - name: Upload Coverage Badge
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: code-coverage-gh-pages
+          folder: ${{ steps.generate_coverage_badge.outputs.output_path }}

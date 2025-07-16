@@ -32,3 +32,4 @@ RUN poetry install --no-cache --no-interaction
 
 # Copy the source code and unit tests
 COPY hashmap /app/hashmap/
+COPY tests /app/tests/
