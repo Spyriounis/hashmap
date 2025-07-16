@@ -1,4 +1,4 @@
-name: Build Docker container and check code style
+name: Coverage report and check code style
 
 on:
   pull_request:

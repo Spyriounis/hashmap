@@ -25,5 +25,5 @@ runs:
   steps:
     - name: Run Unit Tests and Collect Code Coverage Data
       id: run_unit_tests
-      run: docker run --v ${{ inputs.volume_name }}:${{ inputs.mount_path }} -rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run coverage run --source=hashmap --data-file=${{ inputs.mount_path }}/.coverage -m pytest tests/
+      run: docker run -v ${{ inputs.volume_name }}:${{ inputs.mount_path }} --rm ${{ inputs.image_name }}:${{ inputs.image_tag }} poetry run coverage run --source=hashmap --data-file=${{ inputs.mount_path }}/.coverage -m pytest tests/
       shell: bash
